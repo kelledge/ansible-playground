@@ -1,0 +1,46 @@
+# This is a simple playbook that can be used to ensure that a user their ssh
+# keys are installed on a group of machines defined in the inventory file
+#
+# If there is any magic here, see this link for explanations:
+# > http://docs.ansible.com/ansible/playbooks_intro.html
+#
+# Understanding of YAML as at least corequisite of to playing around with
+# playbooks. See here:
+# > http://www.yaml.org/start.html
+#
+# Once comfortable with playbooks, I highly recommend reading and apply these
+# best practices to get the most out of playbooks:
+# > http://docs.ansible.com/ansible/playbooks_best_practices.html
+#
+# Word of wisdom -- don't bother with the best practices until you have the
+# basics down. They are pretty deep and can be daunting.
+---
+- hosts: digital-ocean  # Host group from the 'inventory' file
+  remote_user: kelledge # User to use when logging in to remotes
+  become: yes           # Use privilege escalation
+  become_method: sudo   # Use 'sudo' to become root
+
+  # Tasks are the core of a playbook. Understanding what modules are available
+  # is very helpful to understanding what tasks can accomplish
+  # > http://docs.ansible.com/ansible/modules_by_category.html
+  #
+  # Because the remote user is the user being installed, this is a pretty
+  # contrived example. Sorry. Out of time.
+  tasks:
+  - name: ensure zsh is installed
+    apt: 
+      name: zsh 
+      update_cache: yes 
+      state: present
+
+  - name: ensure users is present
+    user: 
+      name: kelledge 
+      shell: /usr/bin/zsh 
+      state: present
+
+  - name: ensure ssh public key are installed
+    authorized_key:
+      user: kelledge 
+      key: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDE8NStWRW6InR43i+XDxRGX5lG9IdnOzwkvT5TYswWZFaQwoDNJroj0XqcUP6vBG7NHQUsf94b/jejtJYyvWfm0rUFlD5rluuYuLda8swXhK0iSyYWdVBf+2LmTMiAaa5BXYLb5N/mknW79MJrgYCmK8kUKgIj+1fE75OpXYe0PL4GnDixohrwf+9otEOH+Zs/K0c2sNEsqTzZa9i2occURjFvAXXYBCOZV8IxiMcgx9RMhW/rW6n29ojFDLO2gs2XSZVbX0A38QtUfifVoQ2YRcXjmKp72yYlb2SFDJ4j35ZxGDSzM+NOPxLq8wPmeL4lnKsAk+lfgxedSgwpD341 Kevin Elledge Personal SSH Keypair
+      state: present
