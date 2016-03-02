@@ -17,9 +17,9 @@ _You've been warned_
 ## Files
 There are three files:
 
- # Makefile
- # playbook.yml
- # inventory
+ * Makefile
+ * playbook.yml
+ * inventory
 
 ### Makefile
 This is just a simple makefile to wrap the relativly tedious calls to the 
